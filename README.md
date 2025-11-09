@@ -7,7 +7,7 @@ Analyzing the changing nature of music over the decades, using Spotify data.
 This project explores how popular music has changed from the 1980s to 2020.
 
 # Source Dataset 
-[link](https://www.kaggle.com/datasets/paradisejoy/top-hits-spotify-from-20002019/data?select=songs_normalize.csv)
+This is the [link](https://www.kaggle.com/datasets/paradisejoy/top-hits-spotify-from-20002019/data?select=songs_normalize.csv) to download data file.
 
 
 

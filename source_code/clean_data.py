@@ -26,6 +26,10 @@ def clean_data(path):
     # Normalize genre
     df["genre"] = df["genre"].str.lower().str.replace("-", " ").str.strip()
 
+    # Clean up genre combinations (take first tag only)
+    # df["genre_main"] = df["genre"].apply(lambda x: x.split(",")[0].strip())
+
+
     # Save data in new file
     df.to_csv("Dataset/songs_cleaned.csv", encoding='utf-8', index=False, header=True)
     print("Cleaned data saved to new file")
