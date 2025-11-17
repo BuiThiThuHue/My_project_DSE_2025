@@ -1,10 +1,8 @@
 import pandas as pd
-# import seaborn as sns
-# import matplotlib.pyplot as plt
 
-def clean_data(path):
+def clean_data(path, file_name_read, file_name_save):
     # Read data file
-    df = pd.read_csv(path)
+    df = pd.read_csv(path + file_name_read)
 
     # Drop duplicates & missing
     df = df.drop_duplicates(subset=["song", "artist", "year"])
@@ -20,17 +18,20 @@ def clean_data(path):
     df["duration_min"] = df["duration_ms"] / 60000
 
     # Add energy_level column
-    df["energy_level"] = pd.cut(df["energy"],
-                                bins=[0, 0.4, 0.7, 1.0],
-                                labels=["Low", "Medium", "High"])
+    df["energy_level"] = pd.cut(df["energy"], bins=[0, 0.4, 0.7, 1.0],labels=["Low", "Medium", "High"])
+
+    df["artist"] = df["artist"].str.strip().str.lower()
+
     # Normalize genre
     df["genre"] = df["genre"].str.lower().str.replace("-", " ").str.strip()
 
-    # Clean up genre combinations (take first tag only)
-    # df["genre_main"] = df["genre"].apply(lambda x: x.split(",")[0].strip())
+    # genre column has more than 1 value (hip hop, pop, R&B) so we need to split (take first tag only)
+    df["genre_main"] = df["genre"].apply(lambda x: x.split(",")[0].strip())
 
+    # change set() value to Unknown
+    df['genre_main'] = df['genre_main'].replace('set()', 'unknown')
 
     # Save data in new file
-    df.to_csv("Dataset/songs_cleaned.csv", encoding='utf-8', index=False, header=True)
+    df.to_csv(path + file_name_save, encoding='utf-8', index=False, header=True)
     print("Cleaned data saved to new file")
     return df
