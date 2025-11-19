@@ -17,3 +17,5 @@ pip install -r requirements.txt
 # Run pipe line
 python main.py
 
+# Run app
+streamlit run Home.py

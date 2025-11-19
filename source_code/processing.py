@@ -8,22 +8,18 @@ def songs_per_year (df: pd.DataFrame):
     Number of songs per year
     """
     songs_per_years = df['year'].value_counts().sort_index()
-    # print(songs_per_years)
+    labels = songs_per_years.values.tolist()
 
-    #create list label
-    list_label = []
-    for i in songs_per_years.values:
-        list_label.append(i)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bar = ax.bar(songs_per_years.index, songs_per_years.values)
+    ax.bar_label(bar, labels, padding=3)
 
-    #draw bar chart
-    bar = plt.bar(songs_per_years.index, songs_per_years.values)
-    plt.bar_label(bar, list_label, padding=3)
+    ax.set_title("Number of songs per year")
+    ax.set_xlabel("Years")
+    ax.set_ylabel("Number of songs")
 
-    #adding title
-    plt.title("Number of songs per year")
-    plt.xlabel("Years")
-    plt.ylabel("Number of songs")
-    plt.show()
+    fig.tight_layout()
+    return fig
 
 def top10_artist_songs (df: pd.DataFrame):
     """
@@ -45,22 +41,23 @@ def plot_top_artists(df: pd.DataFrame):
     """
     plot scatter top 10 artists by average popularity of their songs
     """
-    plt.figure(figsize=(12, 10))
+    
+    fig, ax = plt.subplots(figsize=(12, 10))
 
     # color by popularity
     colors = df['popularity']
     # size by total songs
     sizes = df['total songs'] * 50
 
-    scatter_plot = plt.scatter(df['artist'], df['popularity'], s=sizes, c=colors, cmap='seismic')
+    scatter_plot = ax.scatter(df['artist'], df['popularity'], s=sizes, c=colors, cmap='seismic')
     
     # add colorbar
-    cbar = plt.colorbar(scatter_plot)
+    cbar = fig.colorbar(scatter_plot)
     cbar.set_label('Popularity')
 
     # make lable for each point
     for i in range(len(df)):
-        plt.text(
+        ax.text(
             df['artist'][i],
             df['popularity'][i] + 0.4,
             f"{df['total songs'][i]} songs",
@@ -68,14 +65,14 @@ def plot_top_artists(df: pd.DataFrame):
             fontsize = 9
         )
 
-    plt.title("Top 10 artists by average popularity of their songs")
-    plt.xlabel("Artist")
-    plt.ylabel("Average Popularity")
+    ax.set_title("Top 10 artists by average popularity of their songs")
+    ax.set_xlabel("Artist")
+    ax.set_ylabel("Average Popularity")
 
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-
+    ax.set_xticklabels(df['artist'],rotation=45)
+    # plt.show()
+    fig.tight_layout()
+    return fig 
 
  # trend over time  
 def plot_trend_over_time(df: pd.DataFrame):
@@ -105,9 +102,9 @@ def top_genre_songs(df: pd.DataFrame):
     # print(top_genres)
 
     df_top = df[df["genre_main"].isin(top_genres)]
-    genre_group = df_top.groupby(['decade', 'genre_main']).size().reset_index(name='count')
+    genre_group = df_top.groupby(['decade', 'genre_main']).size().reset_index(name = 'count')
 
-    genre_pivot = genre_group.pivot(index='genre_main', columns='decade', values='count')
+    genre_pivot = genre_group.pivot(index = 'genre_main', columns = 'decade', values = 'count')
     genre_pivot = genre_pivot.fillna(0)
 
     return genre_pivot
@@ -116,8 +113,8 @@ def plot_top_genre(df: pd.DataFrame):
     """
     Plot top 5 genres by number of song in each decade
     """
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(df.sort_index(), annot=True, fmt='.0f', cmap='YlGnBu')
+    plt.figure(figsize = (12, 8))
+    sns.heatmap(df.sort_index(), annot=True, fmt = '.0f', cmap = 'YlGnBu')
     plt.title('Genre Popularity Across Decades')
     plt.xlabel('Decade')
     plt.ylabel('Genre')
