@@ -41,7 +41,6 @@ def plot_top_artists(df: pd.DataFrame):
     """
     plot scatter top 10 artists by average popularity of their songs
     """
-    
     fig, ax = plt.subplots(figsize=(12, 10))
 
     # color by popularity
@@ -70,28 +69,29 @@ def plot_top_artists(df: pd.DataFrame):
     ax.set_ylabel("Average Popularity")
 
     ax.set_xticklabels(df['artist'],rotation=45)
-    # plt.show()
     fig.tight_layout()
     return fig 
 
  # trend over time  
 def plot_trend_over_time(df: pd.DataFrame):
+    """plot trend of feature over time"""
     features = ["danceability", "energy", "valence", "acousticness"]
 
     # mean group by decade
     df_decade = df.groupby("decade")[features].mean().reset_index()
 
     # plot line trend
-    plt.figure(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
     for f in features:
         plt.plot(df_decade["decade"], df_decade[f], marker="o", label=f)
 
-    plt.title("Feature Trends by Decade")
-    plt.xlabel("Decade")
-    plt.ylabel("Mean Value")
-    plt.legend()
-    plt.tight_layout()
-    plt.show() 
+    ax.set_title("Feature Trends by Decade")
+    ax.set_xlabel("Decade")
+    ax.set_ylabel("Mean Value")
+    ax.legend()
+
+    fig.tight_layout()
+    return fig
 
 
 def top_genre_songs(df: pd.DataFrame):
@@ -113,28 +113,33 @@ def plot_top_genre(df: pd.DataFrame):
     """
     Plot top 5 genres by number of song in each decade
     """
-    plt.figure(figsize = (12, 8))
-    sns.heatmap(df.sort_index(), annot=True, fmt = '.0f', cmap = 'YlGnBu')
-    plt.title('Genre Popularity Across Decades')
-    plt.xlabel('Decade')
-    plt.ylabel('Genre')
-    plt.show()
+    fig, ax = plt.subplots(figsize = (12, 8))
+    sns.heatmap(df.sort_index(), annot=True, fmt = '.0f', cmap = 'YlGnBu', ax=ax)
+    ax.set_title('Genre Popularity Across Decades')
+    ax.set_xlabel('Decade')
+    ax.set_ylabel('Genre')
+
+    plt.tight_layout()
+    # plt.show()
+    return fig
 
 def trend_of_energy(df: pd.DataFrame):
     """
     Trend of Energy Levels over Decades
     """
     energy_trend = df.groupby(["decade", "energy_level"]).size().reset_index(name="count")
-
+    fig, ax = plt.subplots(figsize=(10, 5))
     sns.lineplot(
         data = energy_trend,
         x = "decade",
         y = "count",
         hue = "energy_level",
-        marker = "v"
+        marker = "v",
+        ax=ax
     )
-    plt.title("Trend of Energy Levels Over Decades")
-    plt.show()
+    ax.set_title("Energy Level Trend Across Decades")
+    plt.tight_layout()
+    return fig
 
 def plot_Energy_Genre(df: pd.DataFrame):
     """
@@ -142,7 +147,51 @@ def plot_Energy_Genre(df: pd.DataFrame):
     """
     genre_energy = df.groupby(["genre_main", "energy_level"]).size().reset_index(name="count")
 
-    sns.catplot( data = genre_energy, x = "genre_main", y = "count", hue = "energy_level", kind = "bar", height=5, aspect=2)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(
+            data=genre_energy,
+            x="genre_main",
+            y="count",
+            hue="energy_level",
+            ax=ax
+            )
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
+    ax.set_title("Energy Level by Genre")
+
+    plt.tight_layout()
+    return fig
+
+def song_per_genre(df: pd.DataFrame):
+    """Song per genre"""
+    genre_counts = df['genre_main'].value_counts().sort_values(ascending=False)
+    labels = genre_counts.values.tolist()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bar = ax.bar(genre_counts.index, genre_counts.values)
+    ax.bar_label(bar, labels, padding=3)
+
+    # genre_counts = df["genre_main"].value_counts()
+
+    ax.set_ylabel("Number songs")
+    ax.set_xlabel("Genre")
     plt.xticks(rotation=45)
-    plt.title("Energy Level by Genre")
-    plt.show()
+    ax.set_title("Number of Songs per Genre")
+    fig.tight_layout()
+    return fig
+
+def song_per_enery(df: pd.DataFrame):
+    """Song per enery"""
+
+    count_level = df['energy_level'].value_counts().sort_values(ascending=False)
+    labels = count_level.values.tolist()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bar = ax.bar(count_level.index, count_level.values)
+    ax.bar_label(bar, labels, padding=3)
+
+    ax.set_ylabel("Number songs")
+    ax.set_xlabel("Energy Level")
+    plt.xticks(rotation=45)
+    ax.set_title("Number of Songs per Energy Level")
+    fig.tight_layout()
+    return fig

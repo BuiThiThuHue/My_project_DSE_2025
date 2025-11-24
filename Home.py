@@ -1,16 +1,8 @@
 import streamlit as st
-import pandas as pd
 
-# Load dataset once into session_state
-@st.cache_data
-def load_data():
-    return pd.read_csv(f"d:/Study_Unimi/Coding_Python/Project_2025/My_project_DSE_2025/Dataset/songs_cleaned.csv")
+url = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDJwMWwzOGthZTg0Z2FlajZxaXFhcW8zYXk2enJjOTExMmN2cHdtYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/EwKfD3kAzUghvQiTuw/giphy.gif"
 
-if "df" not in st.session_state:
-    st.session_state["df"] = load_data()
-
-st.title(" The Emotion of Sound")
-st.write("""
-Chào mừng bạn đến dashboard phân tích âm nhạc!  
-Hãy chọn một trang ở bên trái để bắt đầu khám phá.
-""")
+st.image(url, width=200)
+st.title("The Sound of Change")
+st.write("Welcome to the dashboard analyst of song!")
+st.write("Please use the sidebar to navigate through the song analyses")

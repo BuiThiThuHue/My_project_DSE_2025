@@ -14,9 +14,46 @@ if "df" not in st.session_state:
 
 df = st.session_state["df"]
 
-st.subheader("Genre Analysis")
+# st.header("Genre Analysis")
 
 
-df = st.session_state["df"]
-fig = processing.songs_per_year(df)
+# --- Sidebar Filters ---
+st.sidebar.header("Genre")
+selected_genres = st.sidebar.multiselect(
+    "Select Genre:",
+    options=df["genre_main"].unique(),
+    default=[]
+)
+
+if selected_genres:
+    df_filtered = df[df["genre_main"].isin(selected_genres)]
+else:
+    df_filtered = df
+
+#----Total songs
+if selected_genres:
+    st.write(f"Total songs in genres {', '.join(selected_genres)}: {len(df_filtered)} songs")
+else:
+    st.write(f"Total songs in ALL genres: {len(df_filtered)} songs")
+
+st.markdown("---")
+
+# -------------------------------------------------------------------
+# Phân bố số bài hát theo thể loại
+st.markdown("## Song by genre")
+fig = processing.song_per_genre(df_filtered)
+st.pyplot(fig)
+
+st.markdown("---")
+
+#-------------
+st.markdown("## Top 5 genre by decade")
+top_genre = processing.top_genre_songs(df_filtered)
+fig = processing.plot_top_genre(top_genre)
+st.pyplot(fig)
+st.markdown("---")
+
+# Energy Level theo Genre
+st.markdown("## Energy Level by Genre")
+fig = processing.plot_Energy_Genre(df_filtered)
 st.pyplot(fig)

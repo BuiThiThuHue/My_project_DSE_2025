@@ -8,7 +8,7 @@ from source_code import processing
 # -----------------------------
 @st.cache_data
 def load_data():
-    return pd.read_csv("d:/Study_Unimi/Coding_Python/Project_2025/My_project_DSE_2025/Dataset/songs_data.csv")
+    return pd.read_csv("d:/Study_Unimi/Coding_Python/Project_2025/My_project_DSE_2025/Dataset/songs_cleaned.csv")
 
 # -----------------------------
 # INIT SESSION STATE
@@ -19,24 +19,47 @@ if "df" not in st.session_state:
 df = st.session_state["df"]
 
 # -----------------------------
-# PAGE CONTENT
-# -----------------------------
-st.title("Tổng Quan Dữ Liệu")
+st.title("Data overview")
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Number songs", f"{len(df):,}")
+col2.metric("Number artists", df["artist"].nunique())
+col3.metric("Number genre", df["genre_main"].nunique())
+
+st.markdown("---")
 
 st.subheader("Number of Songs per Year")
-fig = processing.songs_per_year(df)  # Quan trọng
+fig = processing.songs_per_year(df) 
 st.pyplot(fig)
-
+st.markdown("---")
 # -----------------------------
 # Stats
 # -----------------------------
-st.write("### Một vài thống kê nhanh:")
-st.write(df.describe())
+with st.expander("### 10 first rows of dataset"):
+    st.dataframe(df.head())
 
-st.write("### 10 dòng đầu tiên của dữ liệu")
-st.dataframe(df.head())
+with st.expander("### Quick statistic:"):
+    st.write(df.describe())
+st.markdown("---")
 
-st.write("### Số lượng bài hát theo năm phát hành")
+# plot top 10 artist
+st.write("### Top 10 artists")
 df = st.session_state["df"]
-fig = processing.plot_top_artists(processing.top10_artist_songs(df))
+top10 = processing.top10_artist_songs(df)
+# st.dataframe(top10)
+fig = processing.plot_top_artists(top10)
 st.pyplot(fig)
+st.markdown("---")
+
+# show artist with songs
+selected_artist = st.selectbox("Select an artist", top10['artist'])
+artist_songs = df[df['artist'] == selected_artist]
+df2 = artist_songs[['artist','song','year','genre_main','popularity']]
+st.dataframe(df2)
+
+st.markdown("---")
+
+# plot trend of feature
+st.write("### Feature Trends")
+fig2 = processing.plot_trend_over_time(df)
+st.pyplot(fig2)
