@@ -4,5 +4,5 @@ url = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDJwMWwzOGthZTg0Z2FlajZ
 
 st.image(url, width=200)
 st.title("The Sound of Change")
-st.write("Welcome to the dashboard analyst of song!")
-st.write("Please use the sidebar to navigate through the song analyses")
+st.write("Welcome to the dashboard of music change analysis from the 1980s to the 2020s!")
+st.write("Please use the sidebar to navigate through the song analysis.")

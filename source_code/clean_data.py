@@ -29,7 +29,7 @@ def clean_data(path, file_name_read, file_name_save):
     df["genre_main"] = df["genre"].apply(lambda x: x.split(",")[0].strip())
 
     # change set() value to Unknown
-    df['genre_main'] = df['genre_main'].replace('set()', 'unknown')
+    df['genre_main'] = df['genre_main'].replace('set()', 'others')
 
     # Save data in new file
     df.to_csv(path + file_name_save, encoding='utf-8', index=False, header=True)

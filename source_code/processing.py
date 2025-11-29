@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # def number song per year
 def songs_per_year (df: pd.DataFrame):
     """
-    Number of songs per year
+    Number of songs over year
     """
     songs_per_years = df['year'].value_counts().sort_index()
     labels = songs_per_years.values.tolist()
@@ -14,7 +14,7 @@ def songs_per_year (df: pd.DataFrame):
     bar = ax.bar(songs_per_years.index, songs_per_years.values)
     ax.bar_label(bar, labels, padding=3)
 
-    ax.set_title("Number of songs per year")
+    ax.set_title("Number of songs over year")
     ax.set_xlabel("Years")
     ax.set_ylabel("Number of songs")
 
@@ -172,10 +172,10 @@ def song_per_genre(df: pd.DataFrame):
 
     # genre_counts = df["genre_main"].value_counts()
 
-    ax.set_ylabel("Number songs")
+    ax.set_ylabel("Number of songs")
     ax.set_xlabel("Genre")
     plt.xticks(rotation=45)
-    ax.set_title("Number of Songs per Genre")
+    ax.set_title("Number of Songs by Genre")
     fig.tight_layout()
     return fig
 
@@ -189,9 +189,9 @@ def song_per_enery(df: pd.DataFrame):
     bar = ax.bar(count_level.index, count_level.values)
     ax.bar_label(bar, labels, padding=3)
 
-    ax.set_ylabel("Number songs")
+    ax.set_ylabel("Number of songs")
     ax.set_xlabel("Energy Level")
     plt.xticks(rotation=45)
-    ax.set_title("Number of Songs per Energy Level")
+    ax.set_title("Number of Songs by Energy Level")
     fig.tight_layout()
     return fig

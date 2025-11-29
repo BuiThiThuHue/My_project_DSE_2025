@@ -40,14 +40,14 @@ st.markdown("---")
 
 # -------------------------------------------------------------------
 # Phân bố số bài hát theo thể loại
-st.markdown("## Song by genre")
+st.markdown("## Songs by genre")
 fig = processing.song_per_genre(df_filtered)
 st.pyplot(fig)
 
 st.markdown("---")
 
 #-------------
-st.markdown("## Top 5 genre by decade")
+st.markdown("## Top 5 genres by decade")
 top_genre = processing.top_genre_songs(df_filtered)
 fig = processing.plot_top_genre(top_genre)
 st.pyplot(fig)

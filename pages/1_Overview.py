@@ -22,13 +22,13 @@ df = st.session_state["df"]
 st.title("Data overview")
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Number songs", f"{len(df):,}")
-col2.metric("Number artists", df["artist"].nunique())
-col3.metric("Number genre", df["genre_main"].nunique())
+col1.metric("Number of songs", f"{len(df):,}")
+col2.metric("Number of artists", df["artist"].nunique())
+col3.metric("Number of genres", df["genre_main"].nunique())
 
 st.markdown("---")
 
-st.subheader("Number of Songs per Year")
+st.subheader("Number of Songs over Year")
 fig = processing.songs_per_year(df) 
 st.pyplot(fig)
 st.markdown("---")
@@ -38,7 +38,7 @@ st.markdown("---")
 with st.expander("### 10 first rows of dataset"):
     st.dataframe(df.head())
 
-with st.expander("### Quick statistic:"):
+with st.expander("### Quick statistics:"):
     st.write(df.describe())
 st.markdown("---")
 
@@ -55,6 +55,7 @@ st.markdown("---")
 selected_artist = st.selectbox("Select an artist", top10['artist'])
 artist_songs = df[df['artist'] == selected_artist]
 df2 = artist_songs[['artist','song','year','genre_main','popularity']]
+df2 = df2.reset_index(drop=True).sort_values(by="year", ascending=True)
 st.dataframe(df2)
 
 st.markdown("---")
